@@ -1,0 +1,17 @@
+#compiled output
+/dist
+/tmp
+/out-tsc
+
+#dependencies
+node_modules
+
+#terraform excludes
+.terraform
+*.tfstate
+*.tfstate.backup
+
+# IDEs amd editors
+/.idea
+.project
+.classpath
