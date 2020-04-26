@@ -16,14 +16,14 @@ data "aws_subnet_ids" "default_subnets" {
 
 data "aws_ami" "aws-linux-2-latest" {
   most_recent = true
-  owners = ["amazon"]
-  filter{
-  name   = "name"
-  values = ["amzn2-ami-hvm-*"]
+  owners      = ["amazon"]
+  filter {
+    name   = "name"
+    values = ["amzn2-ami-hvm-*"]
   }
 }
 data "aws_ami_ids" "aws-linux-2-latest_ids" {
-   owners = ["amazon"]
+  owners = ["amazon"]
 }
 
 resource "aws_security_group" "http_server_sg" {
