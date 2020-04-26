@@ -1,16 +1,35 @@
+
 provider "aws" {
   region  = "us-east-1"
-  version = "~> 2.46"
+  version = "~> 2.58"
 }
 
 resource "aws_default_vpc" "default" {
+  tage = {
+    Name = "Default VPC"
+  }
+}
 
+data "aws_subnet_ids" "default_subnets" {
+  vpc_id = "aws_default_vpc.default.id"
+}
+
+data "aws_ami" "aws-linux-2-latest" {
+  most_recent = true
+  owners = ["amazon"]
+  filter{
+  name   = "name"
+  values = ["amzn2-ami-hvm-*"]
+  }
+}
+data "aws_ami_ids" "aws-linux-2-latest_ids" {
+   owners = ["amazon"]
 }
 
 resource "aws_security_group" "http_server_sg" {
   name = "http_server_sg"
-  #vpc_id = aws_default_vpc.default.id
-  vpc_id = vpc-2c805047
+  #vpc_id = "vpc-e9a5a793"
+  vpc_id = "aws_default_vpc.default.id"
 
   ingress {
     from_port   = 80
@@ -39,14 +58,11 @@ resource "aws_security_group" "http_server_sg" {
 }
 
 resource "aws_instance" "http_server" {
-  #ami                   = "ami-062f7200baf2fa504"
-  #ami                    = data.aws_ami.aws_linux_2_latest.id
-  ami                    = ami-0f7919c33c90f5b58
+  ami                    = "ami-0323c3dd2da7fb37d"
   key_name               = "default-ec2"
   instance_type          = "t2.micro"
   vpc_security_group_ids = [aws_security_group.http_server_sg.id]
-
-  //subnet_id              = "subnet-3f7b2563"
+  #subnet_id              = "subnet-f27e8894"
   subnet_id = tolist(data.aws_subnet_ids.default_subnets.ids)[0]
 
   connection {
